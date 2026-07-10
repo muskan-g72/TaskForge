@@ -5,7 +5,16 @@ project(TaskForge VERSION 0.1.0 LANGUAGES CXX)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
+option(ENABLE_TSAN "Enable ThreadSanitizer" OFF)
 
+if (ENABLE_TSAN)
+    if (MSVC)
+        message(FATAL_ERROR "ThreadSanitizer is not supported with MSVC")
+    endif()
+
+    add_compile_options(-fsanitize=thread -g -O1 -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=thread)
+endif()
 find_package(Threads REQUIRED)
 
 add_library(taskforge
