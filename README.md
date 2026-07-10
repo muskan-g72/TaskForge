@@ -119,7 +119,9 @@ ctest --test-dir build --output-on-failure
 ## Benchmark Results
 
 ### Worker Scaling
-
+Worker scaling was close to linear for this sleep-based, I/O-style workload — 
+since threads spend most of their time waiting rather than consuming CPU, 
+contention stays low as worker count increases.
 | Workers | Throughput (jobs/s) | Avg Latency (ms) | P95 Latency (ms) |
 |---------:|--------------------:|-----------------:|-----------------:|
 | 1 | 62.72 | 1539.20 | 1637 |
@@ -135,9 +137,10 @@ ctest --test-dir build --output-on-failure
 | 100 | 237.64 | 416.58 | 469 |
 | 1000 | 229.78 | 2171.88 | 4320 |
 
+
 **Observations**
 
-- Throughput scales nearly linearly as worker count increases.
+- Throughput scales nearly linearly as worker count increases 
 - Smaller queues reduce waiting time and improve latency.
 - Larger queues buffer more work but increase average and tail latency.
 
@@ -199,4 +202,3 @@ Example JSON log entries:
 - Work stealing between worker threads
 - Disk-backed queue for persistence and crash recovery
 
----
